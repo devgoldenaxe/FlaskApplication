@@ -14,7 +14,9 @@ def hello_world():
         return "ERROR: company_id is missing!", 400  # Return an error response instead of crashing
 
     result = module(company_id, user_id)  # Call the imported module function
-    return result  # Ensure module() returns a valid response
+    return {
+        result: result
+    }  # Ensure module() returns a valid response
 
 if __name__ == "__main__":
     app.run(debug=True)
