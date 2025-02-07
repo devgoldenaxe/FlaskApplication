@@ -1,17 +1,17 @@
 import requests
 
-page_count = 10
+page_count = 100
 def fetch_all_employee_details(company_id):
     url = "https://heartsend.io/version-test/api/1.1/obj/employeedetails"
     headers = {
         "Authorization": "Bearer 7406b3c19debbbf1764237fa783e540f"
     }
     params = {
-        "contraints": '[{"key": "company", "constraint_type": "equals", "value": "'+company_id+'"}]',
+        "constraints": '[{"key": "company", "constraint_type": "equals", "value": "'+company_id+'"}]',
         "cursor": 0,
-        "limit": 10
+        "limit": page_count
     }
-    
+    print(company_id)
     all_results = []
     
     while True:
@@ -332,28 +332,30 @@ def module(company_id, user_id):
 
     # extended_users = df_out + [test_user]
     # print(df_out[0])
-
+    # print(len(df_out))
+    # for item in df_out:
+    #     print("id: " + item["_id"])
     test_user = next((item for item in df_out if item['_id'] == user_id), None)
     # Now let's retrieve top 5 for the test_user
     top_5 = recommend_for_user(test_user, df_out, top_n=5)
     # print(top_5,"------")
     # 5) Print out the recommended matches
-    print(f"Top 5 recommendations for {test_user['Full name']} ({test_user['Employee Email']}):\n")
-    for match_user, score in top_5:
-        print(f"Name: {match_user['Full name']}")
-        print(f"Email: {match_user['Employee Email']}")
-        print(f"Score: {score}")
-        print("Features:")
-        print(f"  Availability: {match_user.get('Availability', '')}")
-        print(f"  Health_Condition: {match_user.get('Health Condition', '')}")
-        print(f"  Hobby: {match_user.get('hobbies', '')}")
-        print(f"  Intentions: {match_user.get('Intention', '')}")
-        print(f"  Race: {match_user.get('Race', '')}")
-        print(f"  Religion: {match_user.get('Religion', '')}")
-        print(f"  Skills: {match_user.get('Skills desired', '')}")
-        print(f"  Location: {match_user.get('State', '')}, {match_user.get('state_id', '')}")
-        print(f"  Gender: {match_user.get('Gender', '')}")
-        print("-" * 40)
+    # print(f"Top 5 recommendations for {test_user['Full name']} ({test_user['Employee Email']}):\n")
+    # for match_user, score in top_5:
+    #     print(f"Name: {match_user['Full name']}")
+    #     print(f"Email: {match_user['Employee Email']}")
+    #     print(f"Score: {score}")
+    #     print("Features:")
+    #     print(f"  Availability: {match_user.get('Availability', '')}")
+    #     print(f"  Health_Condition: {match_user.get('Health Condition', '')}")
+    #     print(f"  Hobby: {match_user.get('hobbies', '')}")
+    #     print(f"  Intentions: {match_user.get('Intention', '')}")
+    #     print(f"  Race: {match_user.get('Race', '')}")
+    #     print(f"  Religion: {match_user.get('Religion', '')}")
+    #     print(f"  Skills: {match_user.get('Skills desired', '')}")
+    #     print(f"  Location: {match_user.get('State', '')}, {match_user.get('state_id', '')}")
+    #     print(f"  Gender: {match_user.get('Gender', '')}")
+    #     print("-" * 40)
 
 
     # test_user = {
@@ -374,6 +376,8 @@ def module(company_id, user_id):
     # print(type(top_5))
     
     ids = [item['_id'] for item, score in top_5]
+    print(ids)
     return ids
+
 # if __name__ == "__main__":
-#     module()
+#     module("1715320195395x862460891761909300","1724149699789x546285759204683260")
