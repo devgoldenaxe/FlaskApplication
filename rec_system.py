@@ -35,7 +35,7 @@ def fetch_all_employee_details(company_id):
             break
         
         params["cursor"] = cursor + page_count
-        break
+        
     
     return all_results
 
