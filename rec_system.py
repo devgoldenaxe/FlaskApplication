@@ -1,8 +1,11 @@
 import requests
 
-page_count = 100
-def fetch_all_employee_details(company_id):
+page_count = 1000
+def fetch_all_employee_details(company_id , version):
     url = "https://heartsend.io/version-test/api/1.1/obj/employeedetails"
+    if version == "live":
+        url = "https://heartsend.io/api/1.1/obj/employeedetails"
+        
     headers = {
         "Authorization": "Bearer 7406b3c19debbbf1764237fa783e540f"
     }
@@ -295,14 +298,14 @@ def recommend_for_user(user, all_users, top_n=5):
 # 4. Example Usage with an Excel File
 ##################################################
 
-def module(company_id, user_id):
+def module(company_id, user_id , version):
     # 1) Load the data from Excel (the xlsx you created).
 
 
     # excel_file_path = "synthetic_output.xlsx"  # <-- CHANGE THIS to your actual file name/path
     # sheet_name = 0  # or the name of the sheet, e.g. "Sheet1"
-    
-    df_out = fetch_all_employee_details(company_id)
+    print(version)
+    df_out = fetch_all_employee_details(company_id , version)
     
     
 
@@ -337,7 +340,10 @@ def module(company_id, user_id):
     #     print("id: " + item["_id"])
     test_user = next((item for item in df_out if item['_id'] == user_id), None)
     # Now let's retrieve top 5 for the test_user
-    top_5 = recommend_for_user(test_user, df_out, top_n=5)
+    ids = []
+    if test_user:
+        top_5 = recommend_for_user(test_user, df_out, top_n=20)
+        ids = [item['_id'] for item, score in top_5]
     # print(top_5,"------")
     # 5) Print out the recommended matches
     # print(f"Top 5 recommendations for {test_user['Full name']} ({test_user['Employee Email']}):\n")
@@ -375,7 +381,6 @@ def module(company_id, user_id):
 
     # print(type(top_5))
     
-    ids = [item['_id'] for item, score in top_5]
     print(ids)
     return ids
 
