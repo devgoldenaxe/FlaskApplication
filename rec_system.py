@@ -1,5 +1,22 @@
 import requests
+import datetime
+cache = {}
 
+def get_students(schoolId, version):
+    now = datetime.datetime.now()
+    
+    if schoolId in cache:
+        students, timestamp = cache[schoolId]
+        if now - timestamp < datetime.timedelta(days=1):
+            print("Returning cached data.")
+            return students
+
+    # If no valid cached data is available, fetch new data.
+    print("Fetching new data.")
+    students = fetch_all_employee_details(schoolId, version)
+    cache[schoolId] = (students, now)
+    return students
+ 
 page_count = 1000
 def fetch_all_employee_details(company_id , version):
     url = "https://heartsend.io/version-test/api/1.1/obj/employeedetails"
@@ -305,7 +322,7 @@ def module(company_id, user_id , version):
     # excel_file_path = "synthetic_output.xlsx"  # <-- CHANGE THIS to your actual file name/path
     # sheet_name = 0  # or the name of the sheet, e.g. "Sheet1"
     print(version)
-    df_out = fetch_all_employee_details(company_id , version)
+    df_out = get_students(company_id , version)
     
     
 
